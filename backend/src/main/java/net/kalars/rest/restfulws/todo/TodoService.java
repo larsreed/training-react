@@ -21,7 +21,7 @@ public class TodoService {
     }
 
     public List<Todo> getAllTodos(final String userName) {
-        return todos.stream().filter(todo -> todo.getUserName().equals(userName)).collect(Collectors.toList());
+        return todos.stream().sorted().filter(todo -> todo.getUserName().equals(userName)).collect(Collectors.toList());
     }
 
     public boolean deleteTodo(final String userName, final long id) {

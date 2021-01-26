@@ -2,7 +2,7 @@ package net.kalars.rest.restfulws.todo;
 
 import java.util.Date;
 
-public class Todo {
+public class Todo implements Comparable<Todo> {
 
     private long id;
     private String userName;
@@ -66,5 +66,15 @@ public class Todo {
 
     public void setDone(final boolean done) {
         this.done = done;
+    }
+
+    @Override
+    public int compareTo(final Todo that) {
+        if (!this.done && that.done) return -1;
+        if (this.done && !that.done) return +1;
+        if (this.dueDate!=null && that.dueDate==null) return -1;
+        if (this.dueDate==null && that.dueDate!=null) return +1;
+        if (!this.dueDate.equals(that.dueDate)) return this.dueDate.compareTo(that.dueDate);
+        return this.description.compareTo(that.description);
     }
 }
