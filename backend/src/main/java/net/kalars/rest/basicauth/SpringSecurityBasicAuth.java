@@ -1,4 +1,4 @@
-package net.kalars.rest.restfulws.basicauth;
+package net.kalars.rest.basicauth;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

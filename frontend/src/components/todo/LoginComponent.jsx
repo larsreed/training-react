@@ -11,7 +11,6 @@ export default class LoginComponent extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.loginClicked = this.loginClicked.bind(this);
-    this.cloginClicked = this.cloginClicked.bind(this);
   }
 
   handleChange(event) {
@@ -25,7 +24,7 @@ export default class LoginComponent extends Component {
     AuthenticationService.authenticate(this.state.username, this.state.password)
       .then((resp) => {
         // console.log('then '+resp);
-        AuthenticationService.registerLogin(this.state.username, this.state.password);
+        AuthenticationService.registerJwtLogin(this.state.username, resp.data.token);
         this.props.history.push(`/welcome/${this.state.username}`);
       })
       .catch((error) => {
@@ -34,19 +33,6 @@ export default class LoginComponent extends Component {
           hasFailed: true,
         });
       });
-  }
-
-  cloginClicked() {
-    if (this.state.username === 'foo' && this.state.password === 'bar') {
-      console.log('then ');
-      AuthenticationService.registerLogin(this.state.username, this.state.password);
-      this.props.history.push(`/welcome/${this.state.username}`);
-    } else {
-      console.log('catch ');
-      this.setState({
-        hasFailed: true,
-      });
-    }
   }
 
   render() {

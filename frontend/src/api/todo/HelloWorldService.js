@@ -1,8 +1,10 @@
 import axios from 'axios';
+import { BASE_URL } from '../../components/todo/Constants';
+
 
 class HelloWorldService {
   executeHelloWorldService(user) {
-    return axios.get('http://localhost:8080/hello-var/' + user);
+    return axios.get(BASE_URL + '/hello-var/' + user);
   }
 }
 

@@ -1,24 +1,25 @@
 import axios from 'axios';
+import { BASE_URL } from '../../components/todo/Constants';
 
 class TodoDataService {
   retrieveAllTodos(user) {
-    return axios.get(`http://localhost:8080/users/${user}/todos`);
+    return axios.get(BASE_URL + `/users/${user}/todos`);
   }
 
   retrieveTodo(user, id) {
-    return axios.get(`http://localhost:8080/users/${user}/todos/${id}`);
+    return axios.get(BASE_URL + `/users/${user}/todos/${id}`);
   }
 
   deleteTodo(user, id) {
-    return axios.delete(`http://localhost:8080/users/${user}/todos/${id}`);
+    return axios.delete(BASE_URL + `/users/${user}/todos/${id}`);
   }
 
   updateTodo(user, id, todo) {
-    return axios.put(`http://localhost:8080/users/${user}/todos/${id}`, todo);
+    return axios.put(BASE_URL+ `/users/${user}/todos/${id}`, todo);
   }
 
   createTodo(user, todo) {
-    return axios.post(`http://localhost:8080/users/${user}/todos`, todo);
+    return axios.post(BASE_URL + `/users/${user}/todos`, todo);
   }
 }
 

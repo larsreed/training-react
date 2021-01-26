@@ -1,4 +1,4 @@
-package com.in28minutes.rest.webservices.restfulwebservices.jwt;
+package net.kalars.rest.restfulws.com.in28minutes.rest.webservices.restfulwebservices.jwt.resource;
 
 import java.util.Objects;
 
@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.in28minutes.rest.webservices.restfulwebservices.jwt.JwtTokenUtil;
-import com.in28minutes.rest.webservices.restfulwebservices.jwt.JwtUserDetails;
+import net.kalars.rest.restfulws.com.in28minutes.rest.webservices.restfulwebservices.jwt.JwtTokenUtil;
+import net.kalars.rest.restfulws.com.in28minutes.rest.webservices.restfulwebservices.jwt.JwtUserDetails;
 
 @RestController
 @CrossOrigin(origins="http://localhost:4200")
@@ -42,7 +42,7 @@ public class JwtAuthenticationRestController {
 
   @RequestMapping(value = "${jwt.get.token.uri}", method = RequestMethod.POST)
   public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtTokenRequest authenticationRequest)
-      throws AuthenticationException {
+          throws AuthenticationException {
 
     authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
