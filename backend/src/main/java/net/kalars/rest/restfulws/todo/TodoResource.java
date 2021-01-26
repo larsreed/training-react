@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -17,6 +18,7 @@ public class TodoResource {
 
     @GetMapping("/users/{userName}/todos")
     public List<Todo> getAllTodos(final @PathVariable String userName) {
+        System.out.println("todos " + new Date());
         return todoService.getAllTodos(userName);
     }
 

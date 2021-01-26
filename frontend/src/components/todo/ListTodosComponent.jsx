@@ -22,9 +22,12 @@ export default class ListTodosComponent extends Component {
   }
 
   refreshData() {
-    TodoDataService.retrieveAllTodos(AuthenticationService.currentUser()).then((response) =>
-      this.setState({ todos: response.data })
-    );
+    TodoDataService.retrieveAllTodos(AuthenticationService.currentUser())
+      .then((response) => this.setState({ todos: response.data }))
+      .catch((error) => {
+        // TODO error handling
+        console.log(error);
+      });
   }
 
   render() {
@@ -84,13 +87,13 @@ export default class ListTodosComponent extends Component {
 
   deleteTodoClicked(id) {
     TodoDataService.deleteTodo(AuthenticationService.currentUser(), id).then((response) => {
-      this.setState({ message: `${id} deleted` });
+      this.setState({ message: `Todo #${id} deleted` });
       this.refreshData();
     });
   }
 
   doneTodoClicked(todo) {
-    console.log(todo);
+    // console.log(todo);
     var user = AuthenticationService.currentUser();
     todo.done = !todo.done;
     TodoDataService.updateTodo(user, todo.id, todo).then(() => this.refreshData());

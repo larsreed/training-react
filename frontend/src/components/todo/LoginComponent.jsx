@@ -11,6 +11,7 @@ export default class LoginComponent extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.loginClicked = this.loginClicked.bind(this);
+    this.cloginClicked = this.cloginClicked.bind(this);
   }
 
   handleChange(event) {
@@ -20,13 +21,28 @@ export default class LoginComponent extends Component {
   }
 
   loginClicked() {
-    if (this.state.username === 'foo' && this.state.password === 'bar') {
-      this.props.history.push(`/welcome/${this.state.username}`);
-      AuthenticationService.registerLogin(this.state.username, this.state.password);
-      this.setState({
-        hasFailed: false,
+    // console.log("try");
+    AuthenticationService.authenticate(this.state.username, this.state.password)
+      .then((resp) => {
+        // console.log('then '+resp);
+        AuthenticationService.registerLogin(this.state.username, this.state.password);
+        this.props.history.push(`/welcome/${this.state.username}`);
+      })
+      .catch((error) => {
+        // console.log("catch "+error);
+        this.setState({
+          hasFailed: true,
+        });
       });
+  }
+
+  cloginClicked() {
+    if (this.state.username === 'foo' && this.state.password === 'bar') {
+      console.log('then ');
+      AuthenticationService.registerLogin(this.state.username, this.state.password);
+      this.props.history.push(`/welcome/${this.state.username}`);
     } else {
+      console.log('catch ');
       this.setState({
         hasFailed: true,
       });
@@ -37,23 +53,21 @@ export default class LoginComponent extends Component {
     return (
       <div>
         <h1>Login</h1>
-        <form  onSubmit={this.loginClicked}>
+        <div className='container'>
+          {this.state.hasFailed && <div className='alert alert-warning'>Invalid Credentials</div>}
           <div className='container'>
-            {this.state.hasFailed && <div className='alert alert-warning'>Invalid Credentials</div>}
-            <div className='container'>
-              <p>
-                Username: <input type='text' name='username' value={this.state.username} onChange={this.handleChange} />
-              </p>
-              <p>
-                Password: <input type='password' name='password' value={this.state.password} onChange={this.handleChange} />
-              </p>
-              <p>&nbsp;</p>
-              <button type='submit' className='btn btn-success'>
-                Login
-              </button>
-            </div>
+            <p>
+              Username: <input type='text' name='username' value={this.state.username} onChange={this.handleChange} />
+            </p>
+            <p>
+              Password: <input type='password' name='password' value={this.state.password} onChange={this.handleChange} />
+            </p>
+            <p>&nbsp;</p>
+            <button onClick={this.loginClicked} className='btn btn-success'>
+              Login
+            </button>
           </div>
-        </form>
+        </div>
       </div>
     );
   }
