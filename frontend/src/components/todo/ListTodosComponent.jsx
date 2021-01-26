@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import TodoDataService from '../../api/todo/TodoDataService';
 import AuthenticationService from './AuthenticationService';
 import DateTimeHandling from './DateTimeHandling';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 export default class ListTodosComponent extends Component {
   constructor(props) {
@@ -72,7 +74,7 @@ export default class ListTodosComponent extends Component {
                       Edit
                     </button>
                     &nbsp;
-                    <button className='btn btn-warning' onClick={() => this.deleteTodoClicked(todo.id)}>
+                    <button className='btn btn-warning' onClick={() => this.deleteTodoClicked(todo.id, todo.description)}>
                       Delete
                     </button>
                   </td>
@@ -85,11 +87,26 @@ export default class ListTodosComponent extends Component {
     );
   }
 
-  deleteTodoClicked(id) {
-    TodoDataService.deleteTodo(AuthenticationService.currentUser(), id).then((response) => {
-      this.setState({ message: `Todo #${id} deleted` });
-      this.refreshData();
+  deleteTodoClicked(id, description) {
+    confirmAlert({
+      message: description,
+      title: 'Delete Todo#'+id+'?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            TodoDataService.deleteTodo(AuthenticationService.currentUser(), id).then((response) => {
+              this.setState({ message: `Todo #${id} deleted` });
+              this.refreshData();
+            });
+          }
+        },
+        {
+          label: 'No'
+        }
+      ]
     });
+  
   }
 
   doneTodoClicked(todo) {
