@@ -10,21 +10,26 @@ export default class TodoComponent extends Component {
 
     this.state = {
       id: this.props.match.params.id,
+      done: false,
       description: 'Default description',
       dueDate: moment(new Date()).format('YYYY-MM-DD'),
     };
 
     this.onSubmit = this.onSubmit.bind(this);
     this.validate = this.validate.bind(this);
+    this.cancelForm = this.cancelForm.bind(this);
+    this.title = this.title.bind(this)
   }
 
   componentDidMount() {
-    this.state.id>0 && TodoDataService.retrieveTodo(AuthenticationService.currentUser(), this.state.id).then((response) =>
-      this.setState({
-        description: response.data.description,
-        dueDate: moment(response.data.dueDate).format('YYYY-MM-DD'),
-      })
-    );
+    this.state.id > 0 &&
+      TodoDataService.retrieveTodo(AuthenticationService.currentUser(), this.state.id).then((response) =>
+        this.setState({
+          description: response.data.description,
+          dueDate: moment(response.data.dueDate).format('YYYY-MM-DD'),
+          done: response.data.done,
+        })
+      );
   }
 
   onSubmit(values) {
@@ -35,6 +40,7 @@ export default class TodoComponent extends Component {
         userName: user,
         description: values.description,
         dueDate: values.dueDate,
+        done: values.done,
       }).then(() => this.props.history.goBack());
     } else {
       TodoDataService.updateTodo(user, todoid, {
@@ -42,8 +48,13 @@ export default class TodoComponent extends Component {
         userName: user,
         description: values.description,
         dueDate: values.dueDate,
+        done: values.done,
       }).then(() => this.props.history.goBack());
     }
+  }
+
+  cancelForm() {
+    this.props.history.goBack();
   }
 
   validate(values) {
@@ -59,39 +70,56 @@ export default class TodoComponent extends Component {
     return errors;
   }
 
+  title(id) {
+    if (id < 1)  return 'New Todo'
+    else return 'Edit Todo #' + id
+  }
+
   render() {
-    let { description, dueDate } = this.state;
+    let { description, dueDate, done } = this.state;
 
     return (
       <div>
-        <h1>Todo {this.state.id}</h1>
+        <h1>
+          {this.title(this.state.id)}
+        </h1>
         <div className='container'>
-        <Formik
-          initialValues={{ description, dueDate }}
-          onSubmit={this.onSubmit}
-          validateOnBlur={false}
-          validateOnChange={false}
-          validate={this.validate}
-          enableReinitialize={true}
-        >
-          {(props) => (
-            <Form>
-              <ErrorMessage name='description' component='div' className='alert alert-warning' />
-              <ErrorMessage name='dueDate' component='div' className='alert alert-warning' />
-              <fieldset className='form-group'>
-                <label>Description</label>
-                <Field className='form-control' type='text' name='description' />
-              </fieldset>
-              <fieldset className='form-group'>
-                <label>Due date</label>
-                <Field className='form-control' type='date' name='dueDate' />
-              </fieldset>
-              <button type='submit' className='btn btn-success'>
-                Save
-              </button>
-            </Form>
-          )}
-        </Formik>
+          <Formik
+            initialValues={{ description, dueDate, done }}
+            onSubmit={this.onSubmit}
+            validateOnBlur={false}
+            validateOnChange={false}
+            validate={this.validate}
+            enableReinitialize={true}
+          >
+            {(props) => (
+              <Form>
+                <ErrorMessage name='description' component='div' className='alert alert-warning' />
+                <ErrorMessage name='dueDate' component='div' className='alert alert-warning' />
+                <fieldset className='form-group'>
+                  <label>Description</label>
+                  <Field className='form-control' type='text' name='description' />
+                </fieldset>
+                <fieldset className='form-group'>
+                  <label>Due date</label>
+                  <Field className='form-control' type='date' name='dueDate' />
+                </fieldset>
+                <fieldset className='form-group'>
+                  <Field type='checkbox' name='done' />
+                  <label htmlFor="done" className="form-check-label">Done</label>
+                </fieldset>
+                <button type='submit' className='btn btn-success'>
+                  Save
+                </button>&nbsp;&nbsp;
+                <button type='reset' className='btn btn-secondary'>
+                  Reset
+                </button>&nbsp;&nbsp;
+                <button type='button' className='btn btn-warning' onClick={this.cancelForm}>
+                  Cancel
+                </button>
+              </Form>
+            )}
+          </Formik>
         </div>
       </div>
     );
