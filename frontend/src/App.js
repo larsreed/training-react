@@ -1,47 +1,32 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import React, { Component } from "react";
 // eslint-disable-next-line no-unused-vars
-function AppAppApp() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import logo from "./logo.svg";
+import "./App.css";
+import FirstComp, {
+  SecondComp,
+} from "./components/learning-examples/FirstComp";
+import ThirdComp from "./components/learning-examples/ThirdComp";
+import Counter from "./components/counter/Counter";
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-        </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-        </a>
-        </header>
+        <Counter />
+      </div>
+    );
+  }
+}
+
+// eslint-disable-next-line no-unused-vars
+class LearningComponents extends Component {
+  render() {
+    return (
+      <div className="LearningComponents">
+        My Hello World:
+        <FirstComp />
+        <SecondComp />
+        <ThirdComp />
       </div>
     );
   }
