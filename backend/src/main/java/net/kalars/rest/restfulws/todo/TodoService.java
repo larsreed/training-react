@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class TodoService {
 
     private static final List<Todo> todos = new ArrayList<>();
-    private static long ids = 0;
+    private static Long ids = 0L;
 
     static {
         todos.add(new Todo(++ids, "foo", "Eat", new Date(), false));

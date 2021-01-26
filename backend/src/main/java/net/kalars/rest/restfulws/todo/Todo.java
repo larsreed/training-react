@@ -1,10 +1,16 @@
 package net.kalars.rest.restfulws.todo;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Date;
 
+@Entity
 public class Todo implements Comparable<Todo> {
 
-    private long id;
+    @Id
+    @GeneratedValue
+    private Long id;
     private String userName;
     private String description;
     private Date dueDate;
@@ -28,11 +34,11 @@ public class Todo implements Comparable<Todo> {
     }
 
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(final long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
