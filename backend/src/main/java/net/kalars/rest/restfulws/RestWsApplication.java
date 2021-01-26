@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class RestWsApplication {
 
 	public static void main(String[] args) {
-		System.out.println("starting...");
 		SpringApplication.run(RestWsApplication.class, args);
 	}
 
