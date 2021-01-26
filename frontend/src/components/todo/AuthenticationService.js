@@ -1,12 +1,11 @@
-import axios from 'axios';
-import { BASE_URL } from './Constants';
+import todoApi from './ApiService';
 
 export const SESSION_USERNAME = 'authenticatedUser';
 export const SESSION_TOKEN = 'authToken';
 
 class AuthenticationService {
   authenticateBasic(username, password) {
-    return axios.get(BASE_URL + '/basicauth', {
+    return todoApi.get('/basicauth', {
       headers: { authorization: this.createBasicAuthToken(username, password) },
     });
   }
@@ -19,11 +18,10 @@ class AuthenticationService {
     let token = this.createBasicAuthToken(username, password);
     sessionStorage.setItem(SESSION_USERNAME, username);
     sessionStorage.setItem(SESSION_TOKEN, token);
-    this.setupAuthInterceptors();
   }
 
   authenticate(username, password) {
-    return axios.post(BASE_URL + '/authenticate', {
+    return todoApi.post('/authenticate', {
       username,
       password,
     });
@@ -37,7 +35,6 @@ class AuthenticationService {
     let token = this.createJwtAuthToken(inToken);
     sessionStorage.setItem(SESSION_USERNAME, username);
     sessionStorage.setItem(SESSION_TOKEN, token);
-    this.setupAuthInterceptors();
   }
 
   logout() {
@@ -51,26 +48,6 @@ class AuthenticationService {
 
   isUserLoggedIn() {
     return !(this.currentUser() == null);
-  }
-
-  hackBackInterceptors() {
-    console.log("Auuuuu")
-    console.log(axios.interceptors.request)
-    this.setupAuthInterceptors();
-  }
-
-  
-  setupAuthInterceptors() {
-    let header = sessionStorage.getItem(SESSION_TOKEN);
-    // console.log("intercept0")
-    if (this.isUserLoggedIn()) {
-      // console.log("intercept1")
-      axios.interceptors.request.use(function todoSecurity(config) {
-        // console.log("intercepting")
-        config.headers.authorization = header;
-        return config;
-      });
-    }
   }
 }
 
