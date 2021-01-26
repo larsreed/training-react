@@ -2,14 +2,24 @@ import axios from 'axios';
 import { BASE_URL } from './Constants';
 
 export const SESSION_USERNAME = 'authenticatedUser';
+export const SESSION_TOKEN = 'authToken';
 
 class AuthenticationService {
   authenticateBasic(username, password) {
-    // console.log("ding")
-    // return axios.get(BASE_URL + "/users/foo/todos", {headers: {authorization: this.createBasicAuthToken(username, password)}});
     return axios.get(BASE_URL + '/basicauth', {
       headers: { authorization: this.createBasicAuthToken(username, password) },
     });
+  }
+
+  createBasicAuthToken(username, password) {
+    return 'Basic ' + window.btoa(username + ':' + password);
+  }
+
+  registerLogin(username, password) {
+    let token = this.createBasicAuthToken(username, password);
+    sessionStorage.setItem(SESSION_USERNAME, username);
+    sessionStorage.setItem(SESSION_TOKEN, token);
+    this.setupAuthInterceptors();
   }
 
   authenticate(username, password) {
@@ -19,26 +29,20 @@ class AuthenticationService {
     });
   }
 
-  createBasicAuthToken(username, password) {
-    return 'Basic ' + window.btoa(username + ':' + password);
-  }
-
   createJwtAuthToken(token) {
     return 'Bearer ' + token;
   }
 
-  registerLogin(username, password) {
+  registerJwtLogin(username, inToken) {
+    let token = this.createJwtAuthToken(inToken);
     sessionStorage.setItem(SESSION_USERNAME, username);
-    this.setupAuthInterceptors(this.createBasicAuthToken(username, password));
-  }
-
-  registerJwtLogin(username, token) {
-    sessionStorage.setItem(SESSION_USERNAME, username);
-    this.setupAuthInterceptors(this.createJwtAuthToken(token));
+    sessionStorage.setItem(SESSION_TOKEN, token);
+    this.setupAuthInterceptors();
   }
 
   logout() {
     sessionStorage.removeItem(SESSION_USERNAME);
+    sessionStorage.removeItem(SESSION_TOKEN);
   }
 
   currentUser() {
@@ -49,13 +53,21 @@ class AuthenticationService {
     return !(this.currentUser() == null);
   }
 
-  setupAuthInterceptors(basicAuthHeader) {
+  hackBackInterceptors() {
+    console.log("Auuuuu")
+    console.log(axios.interceptors.request)
+    this.setupAuthInterceptors();
+  }
+
+  
+  setupAuthInterceptors() {
+    let header = sessionStorage.getItem(SESSION_TOKEN);
     // console.log("intercept0")
     if (this.isUserLoggedIn()) {
       // console.log("intercept1")
-      axios.interceptors.request.use((config) => {
+      axios.interceptors.request.use(function todoSecurity(config) {
         // console.log("intercepting")
-        config.headers.authorization = basicAuthHeader;
+        config.headers.authorization = header;
         return config;
       });
     }
