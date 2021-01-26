@@ -1,4 +1,4 @@
-package net.kalars.rest.restfulws;
+package net.kalars.rest.restfulws.helloworld;
 
 public class HelloWorldBean {
 

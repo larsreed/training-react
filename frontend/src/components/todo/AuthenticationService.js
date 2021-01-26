@@ -7,9 +7,12 @@ class AuthenticationService {
     sessionStorage.removeItem('authenticatedUser');
   }
 
+  currentUser() {
+    return sessionStorage.getItem('authenticatedUser');
+  }
+
   isUserLoggedIn() {
-    let user = sessionStorage.getItem('authenticatedUser');
-    return !(user == null);
+    return !(this.currentUser() == null);
   }
 }
 
