@@ -37,15 +37,23 @@ export default class LoginComponent extends Component {
     return (
       <div>
         <h1>Login</h1>
-        <div className='container'>
-          {this.state.hasFailed && <div className='alert alert-warning'>Invalid Credentials</div>}
-          <div></div>
-          User Name: <input type='text' name='username' value={this.state.username} onChange={this.handleChange} />
-          Password: <input type='password' name='password' value={this.state.password} onChange={this.handleChange} />
-          <button className='btn btn-success' onClick={this.loginClicked}>
-            Login
-          </button>
-        </div>
+        <form  onSubmit={this.loginClicked}>
+          <div className='container'>
+            {this.state.hasFailed && <div className='alert alert-warning'>Invalid Credentials</div>}
+            <div className='container'>
+              <p>
+                Username: <input type='text' name='username' value={this.state.username} onChange={this.handleChange} />
+              </p>
+              <p>
+                Password: <input type='password' name='password' value={this.state.password} onChange={this.handleChange} />
+              </p>
+              <p>&nbsp;</p>
+              <button type='submit' className='btn btn-success'>
+                Login
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     );
   }

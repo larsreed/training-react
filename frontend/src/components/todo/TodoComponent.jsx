@@ -65,7 +65,7 @@ export default class TodoComponent extends Component {
     return (
       <div>
         <h1>Todo {this.state.id}</h1>
-        <div className='container'></div>
+        <div className='container'>
         <Formik
           initialValues={{ description, dueDate }}
           onSubmit={this.onSubmit}
@@ -92,6 +92,7 @@ export default class TodoComponent extends Component {
             </Form>
           )}
         </Formik>
+        </div>
       </div>
     );
   }
