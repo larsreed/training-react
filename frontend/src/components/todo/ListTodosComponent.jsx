@@ -69,7 +69,7 @@ export default class ListTodosComponent extends Component {
                   </td>
                   <td className='text-left'>{todo.description}</td>
                   <td>{DateTimeHandling.dateOnly(todo.dueDate)}</td>
-                  <td>
+                  <td className='btn-group'>
                     <button className='btn btn-success' onClick={() => this.editTodoClicked(todo.id)}>
                       Edit
                     </button>
@@ -90,7 +90,7 @@ export default class ListTodosComponent extends Component {
   deleteTodoClicked(id, description) {
     confirmAlert({
       message: description,
-      title: 'Delete Todo#'+id+'?',
+      title: 'Delete Todo#' + id + '?',
       buttons: [
         {
           label: 'Yes',
@@ -99,14 +99,13 @@ export default class ListTodosComponent extends Component {
               this.setState({ message: `Todo #${id} deleted` });
               this.refreshData();
             });
-          }
+          },
         },
         {
-          label: 'No'
-        }
-      ]
+          label: 'No',
+        },
+      ],
     });
-  
   }
 
   doneTodoClicked(todo) {
