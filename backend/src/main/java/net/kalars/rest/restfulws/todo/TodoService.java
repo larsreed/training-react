@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("unused")
 @Service
 public class TodoService {
 
@@ -24,6 +25,7 @@ public class TodoService {
         return todos.stream().sorted().filter(todo -> todo.getUserName().equals(userName)).collect(Collectors.toList());
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public boolean deleteTodo(final String userName, final long id) {
         return todos.removeIf(todo -> todo.getId() == id && todo.getUserName().equals(userName));
     }

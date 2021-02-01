@@ -8,8 +8,8 @@ public class AuthenticationBean {
         return message;
     }
 
-    public AuthenticationBean(final String messsage) {
-        this.message = messsage;
+    public AuthenticationBean(final String message) {
+        this.message = message;
     }
 
     @Override

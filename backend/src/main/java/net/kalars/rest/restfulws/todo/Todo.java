@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Date;
 
+@SuppressWarnings("unused")
 @Entity
 public class Todo implements Comparable<Todo> {
 
@@ -80,7 +81,7 @@ public class Todo implements Comparable<Todo> {
         if (this.done && !that.done) return +1;
         if (this.dueDate!=null && that.dueDate==null) return -1;
         if (this.dueDate==null && that.dueDate!=null) return +1;
-        if (!this.dueDate.equals(that.dueDate)) return this.dueDate.compareTo(that.dueDate);
+        if (this.dueDate != null && !this.dueDate.equals(that.dueDate)) return this.dueDate.compareTo(that.dueDate);
         return this.description.compareTo(that.description);
     }
 }

@@ -7,5 +7,6 @@ import java.util.List;
 
 @Repository
 public interface TodoJpaRepository extends JpaRepository<Todo, Long> {
+    @SuppressWarnings("unused")
     List<Todo> findByUserName(String userName);
 }
