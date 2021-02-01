@@ -1,8 +1,10 @@
 package net.kalars.rest.restfulws.todo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -15,6 +17,11 @@ import static java.util.Collections.emptyList;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class TodoResource {
+
+    public static final String NO_TODO_WITH_ID = "No Todo with id %d";
+    public static final String USERNAME_MISSING = "Username missing";
+    public static final String USERNAME_MISMATCH = "Username in Todo (%s) does not match username in URL (%s)";
+    public static final String ID_MISMATCH = "Id in Todo (%d) does not match id in URL (%d)";
 
     @Autowired
     private TodoJpaRepository repository;
@@ -30,16 +37,22 @@ public class TodoResource {
     @GetMapping("/users/{userName}/todos/{id}")
     public ResponseEntity<Todo> getTodo(final @PathVariable String userName, final @PathVariable long id) {
         final Optional<Todo> todo = repository.findById(id);
-        if (todo.isEmpty()) return ResponseEntity.notFound().build();
-        if (todo.get().getUserName() == null || userName == null) return ResponseEntity.badRequest().build();
-        if (!todo.get().getUserName().equals(userName)) return ResponseEntity.badRequest().build();
+        if (todo.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(NO_TODO_WITH_ID, id));
+        if (todo.get().getUserName() == null || userName == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USERNAME_MISSING);
+        if (!todo.get().getUserName().equals(userName))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format(USERNAME_MISMATCH, todo.get().getUserName(), userName));
         return ResponseEntity.ok(todo.get());
     }
 
     @PostMapping("/users/{userName}/todos")
-    public ResponseEntity<Void> createTodo(final @PathVariable String userName, @RequestBody Todo todo) {
-        if (todo.getUserName() == null || userName == null) return ResponseEntity.badRequest().build();
-        if (!todo.getUserName().equals(userName)) return ResponseEntity.badRequest().build();
+    public ResponseEntity<Todo> createTodo(final @PathVariable String userName, @RequestBody Todo todo) {
+        if (todo.getUserName() == null || userName == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USERNAME_MISSING);
+        if (!todo.getUserName().equals(userName))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format(USERNAME_MISMATCH, todo.getUserName(), userName));
         final Todo res = repository.save(todo);
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(res.getId()).toUri();
         return ResponseEntity.created(uri).build();
@@ -47,9 +60,13 @@ public class TodoResource {
 
     @PutMapping("/users/{userName}/todos/{id}")
     public ResponseEntity<Todo> updateTodo(final @PathVariable String userName, final @PathVariable long id, @RequestBody Todo todo) {
-        if (todo.getUserName() == null || userName == null) return ResponseEntity.badRequest().build();
-        if (!todo.getUserName().equals(userName)) return ResponseEntity.badRequest().build();
-        if (todo.getId() != id) return ResponseEntity.badRequest().build();
+        if (todo.getUserName() == null || userName == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USERNAME_MISSING);
+        if (!todo.getUserName().equals(userName))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format(USERNAME_MISMATCH, todo.getUserName(), userName));
+        if (todo.getId() != id) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                String.format(ID_MISMATCH, todo.getId(), id));
         final Todo res = repository.save(todo);
         return ResponseEntity.ok(res);
     }
