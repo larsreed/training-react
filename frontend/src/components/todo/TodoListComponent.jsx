@@ -13,6 +13,7 @@ export default function TodoList() {
   let history = useHistory();
 
   const [message, setMessage] = useState('');
+
   function addTodoClicked() {
     history.push('/todos/0');
   }
