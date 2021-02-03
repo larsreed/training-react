@@ -58,6 +58,7 @@ export default function TodoList() {
       {
         Header: 'Done',
         accessor: 'done',
+        sortType: "basic",
         Cell: (d) => {
           return (
             <input type='checkbox' className='checkbox' checked={d.value} onChange={() => doneTodoClicked(d.row.values)} />
@@ -79,6 +80,7 @@ export default function TodoList() {
       {
         Header: 'Actions',
         accessor: 'id',
+        disableSortBy: true,
         Cell: (d) => {
           return (
             <span>
@@ -109,6 +111,16 @@ export default function TodoList() {
   );
 
   const [data, setData] = useState([]);
+  const [sortBy] = useState([
+    {
+      id : "done",
+      desc : false,
+    },
+    {
+      id : "dueDate",
+      desc : false,
+    },
+  ]);
 
   let updater = async () => {
     const result = await TodoDataService.retrieveAllTodos(AuthenticationService.currentUser());
@@ -118,6 +130,7 @@ export default function TodoList() {
   useEffect(() => {
     updater();
   }, []);
+
 
   return (
     <div className='Table'>
@@ -132,7 +145,7 @@ export default function TodoList() {
           </button>
           <p />
         </div>
-        <Table columns={columns} data={data} />
+        <Table sortBy={sortBy} columns={columns} data={data} />
       </div>
       <div className="container">&nbsp;{/* TODO just here to avoid being hidden below footer */}</div>  
       
