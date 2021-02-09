@@ -37,23 +37,23 @@ public class TodoResource {
     @GetMapping("/users/{userName}/todos")
     public List<Todo> getAllTodos(final @PathVariable String userName) {
         if (userName == null) return emptyList();
-        var res = repository.findByUserName(userName);
+        final var res = this.repository.findByUserName(userName);
         Collections.sort(res);
         return res;
     }
 
     @GetMapping("/users/{userName}/todos/{id}")
     public ResponseEntity<Todo> getTodo(final @PathVariable String userName, final @PathVariable long id) {
-        final Optional<Todo> todo = repository.findById(id);
+        final Optional<Todo> todo = this.repository.findById(id);
         if (todo.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(NO_TODO_WITH_ID, id));
         userNameValidation(userName, todo.get());
         return ResponseEntity.ok(todo.get());
     }
 
     @PostMapping("/users/{userName}/todos")
-    public ResponseEntity<Todo> createTodo(final @PathVariable String userName, @RequestBody Todo todo) {
+    public ResponseEntity<Todo> createTodo(final @PathVariable String userName, @RequestBody final Todo todo) {
         userNameValidation(userName, todo);
-        final Todo res = repository.save(todo);
+        final Todo res = this.repository.save(todo);
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(res.getId()).toUri();
         return ResponseEntity.created(uri).build();
@@ -65,13 +65,13 @@ public class TodoResource {
         userNameValidation(userName, todo);
         if (todo.getId() != id)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  String.format(ID_MISMATCH, todo.getId(), id));
-        var res = repository.save(todo);
+        final var res = this.repository.save(todo);
         return ResponseEntity.ok(res);
     }
 
     @DeleteMapping("/users/{userName}/todos/{id}")
     public ResponseEntity<Void> deleteTodo(final @PathVariable String userName, final @PathVariable long id) {
-        repository.deleteById(id);
+        this.repository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

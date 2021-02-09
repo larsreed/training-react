@@ -75,6 +75,7 @@ public class Todo implements Comparable<Todo> {
         this.done = done;
     }
 
+    @SuppressWarnings("CompareToUsesNonFinalVariable")
     @Override
     public int compareTo(final Todo that) {
         if (!this.done && that.done) return -1;
