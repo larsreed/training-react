@@ -112,16 +112,20 @@ export default function TodoList() {
   );
 
   const [data, setData] = useState([]);
-  const [sortBy] = useState([
-    {
-      id : "done",
-      desc : false,
-    },
-    {
-      id : "dueDate",
-      desc : false,
-    },
-  ]);
+
+  const initalState = {
+    hiddenColumns: columns.map((column) => {
+      if (column.show === false) return column.accessor || column.id;
+      else return null;
+    }),
+    filters: [ {id: "done", value: "false"}],
+    sortBy : [
+      {
+        id : "dueDate",
+        desc : false,
+      },
+    ],
+  }
 
   let updater = async () => {
     const result = await TodoDataService.retrieveAllTodos(AuthenticationService.currentUser());
@@ -146,7 +150,7 @@ export default function TodoList() {
           </button>
           <p />
         </div>
-        <Table sortBy={sortBy} columns={columns} data={data} showGlobalFilter={false} />
+        <Table columns={columns} data={data} initially={initalState} showGlobalFilter={false} />
       </div>
       <div className="container">&nbsp;{/* TODO just here to avoid being hidden below footer */}</div>  
       

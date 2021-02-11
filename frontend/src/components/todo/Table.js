@@ -113,10 +113,10 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 fuzzyTextFilterFn.autoRemove = (val) => !val;
 
 export default function Table({
-  sortBy,
   columns,
   data,
   showGlobalFilter,
+  initially,
   getHeaderProps = defaultPropGetter,
   getColumnProps = defaultPropGetter,
   getRowProps = defaultPropGetter,
@@ -162,13 +162,7 @@ export default function Table({
       data,
       defaultColumn, // Be sure to pass the defaultColumn option
       filterTypes,
-      initialState: {
-        hiddenColumns: columns.map((column) => {
-          if (column.show === false) return column.accessor || column.id;
-          else return null;
-        }),
-        sortBy,
-      },
+      initialState: initially,
     },
     useFilters,
     useGlobalFilter,
