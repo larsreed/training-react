@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import TodoDataService from '../../api/todo/TodoDataService';
 import AuthenticationService from './AuthenticationService';
 import DateTimeHandling from './DateTimeHandling';
-import Table from './Table';
+import Table, {BooleanFilter, SelectColumnFilter} from './Table';
 
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
@@ -58,7 +58,7 @@ export default function TodoList() {
       {
         Header: 'Done',
         accessor: 'done',
-        sortType: "basic",
+        Filter: BooleanFilter,
         Cell: (d) => {
           return (
             <input type='checkbox' className='checkbox' checked={d.value} onChange={() => doneTodoClicked(d.row.values)} />
@@ -69,18 +69,19 @@ export default function TodoList() {
         Header: 'Description',
         accessor: 'description',
         style: { textAlign: 'left' },
+        filter: 'fuzzyText',
       },
       {
         Header: 'Due',
-        accessor: 'dueDate',
-        Cell: (cell) => {
-          return DateTimeHandling.dateOnly(cell.value);
-        },
+        accessor: (value) => DateTimeHandling.dateOnly(value.dueDate),
+        id: 'dueDate',
+        Filter: SelectColumnFilter,
       },
       {
         Header: 'Actions',
         accessor: 'id',
         disableSortBy: true,
+        disableFilters: true,
         Cell: (d) => {
           return (
             <span>
@@ -145,7 +146,7 @@ export default function TodoList() {
           </button>
           <p />
         </div>
-        <Table sortBy={sortBy} columns={columns} data={data} />
+        <Table sortBy={sortBy} columns={columns} data={data} showGlobalFilter={false} />
       </div>
       <div className="container">&nbsp;{/* TODO just here to avoid being hidden below footer */}</div>  
       
