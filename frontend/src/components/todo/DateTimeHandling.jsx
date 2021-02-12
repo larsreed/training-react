@@ -1,29 +1,14 @@
+var formatISO = require('date-fns/formatISO')
+
 class DateTimeHandling {
   dateTime(dtString) {
-    var dt = new Date(dtString)
-    return dt.toLocaleDateString(undefined, {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit"
-    }) + " " + dt.toLocaleTimeString(undefined, {
-      hour: "2-digit",
-      minute: "2-digit"
-    });
+    return formatISO(new Date(dtString));
   }
   dateOnly(dtString) {
-    var dt = new Date(dtString)
-    return dt.toLocaleDateString(undefined, {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit"
-    });
+    return formatISO(new Date(dtString), { representation: 'date' });
   }
   timeOnly(dtString) {
-    var dt = new Date(dtString)
-    return dt.toLocaleTimeString(undefined, {
-      hour: "2-digit",
-      minute: "2-digit"
-    });
+    return formatISO(new Date(dtString), { representation: 'time' });
   }
 }
 
