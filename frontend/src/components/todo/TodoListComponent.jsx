@@ -118,7 +118,7 @@ export default function TodoList() {
       if (column.show === false) return column.accessor || column.id;
       else return null;
     }),
-    filters: [ {id: "done", value: "false"}],
+    filters: [ {id: "done", value: "false"} ],
     sortBy : [
       {
         id : "dueDate",

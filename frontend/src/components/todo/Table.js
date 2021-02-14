@@ -15,7 +15,7 @@ function GlobalFilter({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) 
 
   return (
     <span>
-      Search:{' '}
+      Search: {' '}
       <input
         value={value || ''}
         onChange={(e) => {
@@ -76,7 +76,6 @@ export function SelectColumnFilter({ column: { filterValue, setFilter, preFilter
   );
 }
 
-
 // This is a custom filter UI for selecting a unique option from a list
 export function BooleanFilter({ column: { filterValue, setFilter } }) {
   // Calculate the options for filtering using the preFilteredRows
@@ -98,7 +97,7 @@ export function BooleanFilter({ column: { filterValue, setFilter } }) {
       <option value=''>All</option>
       {options.map((option, i) => (
         <option key={i} value={option}>
-          {option? "Yes" : "No"}
+          {option ? 'Yes' : 'No'}
         </option>
       ))}
     </select>
@@ -169,6 +168,10 @@ export default function Table({
     useSortBy
   );
 
+  function resetFilters() {
+    window.location.reload();
+  }
+
   function globalFilterRow() {
     if (showGlobalFilter)
       return (
@@ -184,6 +187,8 @@ export default function Table({
               globalFilter={state.globalFilter}
               setGlobalFilter={setGlobalFilter}
             />
+            &nbsp;
+            <button onClick={resetFilters}>Reset All</button>
           </th>
         </tr>
       );
@@ -194,7 +199,7 @@ export default function Table({
       <div>
         <table className='table table-striped' {...getTableProps()}>
           <thead className='thead-dark'>
-          {headerGroups.map((headerGroup) => (
+            {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column, i) => {
                   return (
@@ -245,7 +250,7 @@ export default function Table({
               return (
                 <tr {...row.getRowProps(getRowProps(row))}>
                   {row.cells.map((cell) => {
-                        return (
+                    return (
                       <td
                         {...cell.getCellProps([
                           {
