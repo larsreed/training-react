@@ -10,6 +10,12 @@ export default function ShowError(what, errorObj) {
 export function ShowInfo(msg) {
   toast.info(msg);
 }
+
 export function ShowWarning(msg) {
   toast.warning(msg);
+}
+
+export function ShowToaster(content, options) {
+  // See https://fkhadra.github.io/react-toastify/introduction/
+  toast(content, options);
 }
