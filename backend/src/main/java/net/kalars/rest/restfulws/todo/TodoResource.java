@@ -26,6 +26,7 @@ public class TodoResource {
     @Autowired
     private TodoJpaRepository repository;
 
+    @SuppressWarnings("FeatureEnvy")
     private void userNameValidation(@PathVariable final String userName, final Todo todo) {
         if (todo.getUserName() == null || userName == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USERNAME_MISSING);

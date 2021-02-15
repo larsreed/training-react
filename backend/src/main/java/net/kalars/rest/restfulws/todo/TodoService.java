@@ -31,9 +31,13 @@ public class TodoService {
     }
 
     public Todo getTodo(final String userName, final long id) {
-        return todos.stream().filter(todo -> todo.getId() == id && todo.getUserName().equals(userName)).findFirst().orElse(null);
+        return todos.stream()
+                .filter(todo -> todo.getId() == id && todo.getUserName().equals(userName))
+                .findFirst()
+                .orElse(null);
     }
 
+    @SuppressWarnings("FeatureEnvy")
     public Todo upsertTodo(final Todo todo) {
         if (todo.getId()<1) return insertTodo(++ids, todo);
         deleteTodo(todo.getUserName(), todo.getId());

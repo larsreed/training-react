@@ -30,13 +30,13 @@ public class Todo implements Comparable<Todo> {
         this.done = done;
     }
 
-    public Todo(Todo todo) {
+    public Todo(final Todo todo) {
         this(todo.getId(), todo.userName, todo.description, todo.dueDate, todo.done);
     }
 
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(final Long id) {
@@ -44,7 +44,7 @@ public class Todo implements Comparable<Todo> {
     }
 
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(final String userName) {
@@ -52,7 +52,7 @@ public class Todo implements Comparable<Todo> {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(final String description) {
@@ -60,7 +60,7 @@ public class Todo implements Comparable<Todo> {
     }
 
     public Date getDueDate() {
-        return dueDate;
+        return this.dueDate;
     }
 
     public void setDueDate(final Date dueDate) {
@@ -68,14 +68,14 @@ public class Todo implements Comparable<Todo> {
     }
 
     public boolean isDone() {
-        return done;
+        return this.done;
     }
 
     public void setDone(final boolean done) {
         this.done = done;
     }
 
-    @SuppressWarnings("CompareToUsesNonFinalVariable")
+    @SuppressWarnings({"CompareToUsesNonFinalVariable", "MethodWithMoreThanThreeNegations"})
     @Override
     public int compareTo(final Todo that) {
         if (!this.done && that.done) return -1;
@@ -84,5 +84,11 @@ public class Todo implements Comparable<Todo> {
         if (this.dueDate==null && that.dueDate!=null) return +1;
         if (this.dueDate != null && !this.dueDate.equals(that.dueDate)) return this.dueDate.compareTo(that.dueDate);
         return this.description.compareTo(that.description);
+    }
+
+    @Override
+    public boolean equals(final Object that) {
+        if (!(that instanceof Todo)) return false;
+        return compareTo((Todo) that) == 0;
     }
 }

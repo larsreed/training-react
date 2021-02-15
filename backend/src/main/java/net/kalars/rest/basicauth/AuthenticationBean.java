@@ -5,7 +5,7 @@ public class AuthenticationBean {
     private final String message;
 
     public String getMessage() {
-        return message;
+        return this.message;
     }
 
     public AuthenticationBean(final String message) {
@@ -15,7 +15,7 @@ public class AuthenticationBean {
     @Override
     public String toString() {
         return "AuthenticationBean {" +
-                "message='" + message + '\'' +
+                "message='" + this.message + '\'' +
                 '}';
     }
 }
