@@ -9,12 +9,18 @@ import LogoutComponent from './LogoutComponent';
 import WelcomeComponent from './WelcomeComponent';
 import TodoComponent from './TodoComponent.jsx';
 import TodoListComponent from './TodoListComponent.jsx';
+import { ToastContainer, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class TodoApp extends Component {
   render() {
+    const progCss = {
+      background: 'linear-gradient(to right, rgba(33, 177, 89, .1), rgba(33, 177, 89, 1))',
+    };
     return (
       <Router>
         <HeaderComponent />
+        <ToastContainer transition={Slide} progressStyle={progCss} />
         <Switch>
           <Route path='/' exact component={LoginComponent} />
           <Route path='/login' component={LoginComponent} />

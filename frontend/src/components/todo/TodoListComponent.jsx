@@ -4,15 +4,14 @@ import { useHistory } from 'react-router-dom';
 import TodoDataService from '../../api/todo/TodoDataService';
 import AuthenticationService from './AuthenticationService';
 import DateTimeHandling from './DateTimeHandling';
-import Table, {BooleanFilter, SelectColumnFilter} from './Table';
+import Table, { BooleanFilter, SelectColumnFilter } from './Table';
 
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import ShowError, { ShowInfo } from './ErrorHandling';
 
 export default function TodoList() {
   let history = useHistory();
-
-  const [message, setMessage] = useState('');
 
   function addTodoClicked() {
     history.push('/todos/0');
@@ -36,10 +35,12 @@ export default function TodoList() {
         {
           label: 'Yes',
           onClick: () => {
-            TodoDataService.deleteTodo(AuthenticationService.currentUser(), id).then((response) => {
-              setMessage(`Todo #${id} deleted`);
-              updater();
-            });
+            TodoDataService.deleteTodo(AuthenticationService.currentUser(), id)
+              .then((response) => {
+                ShowInfo(`Todo #${id} deleted`);
+                updater();
+              })
+              .catch((error) => ShowError('Delete', error));
           },
         },
         {
@@ -87,7 +88,7 @@ export default function TodoList() {
             <span>
               <button
                 className='btn btn-success'
-                style={{width: "75px"}}
+                style={{ width: '75px' }}
                 onClick={(e) => {
                   editTodoClicked(d.value);
                 }}
@@ -96,7 +97,7 @@ export default function TodoList() {
               </button>
               <button
                 className='btn btn-warning'
-                style={{width: "75px"}}
+                style={{ width: '75px' }}
                 onClick={(e) => {
                   deleteTodoClicked(d.value, d.row.values.description);
                 }}
@@ -118,31 +119,31 @@ export default function TodoList() {
       if (column.show === false) return column.accessor || column.id;
       else return null;
     }),
-    filters: [ {id: "done", value: "false"} ],
-    sortBy : [
+    filters: [{ id: 'done', value: 'false' }],
+    sortBy: [
       {
-        id : "dueDate",
-        desc : false,
+        id: 'dueDate',
+        desc: false,
       },
     ],
-  }
+  };
 
   let updater = async () => {
-    const result = await TodoDataService.retrieveAllTodos(AuthenticationService.currentUser());
-    setData(result.data);
+    try {
+      const result = await TodoDataService.retrieveAllTodos(AuthenticationService.currentUser());
+      setData(result.data);
+    } catch (error) {
+      ShowError('List', error);
+    }
   };
 
   useEffect(() => {
     updater();
   }, []);
 
-
   return (
     <div className='Table'>
-
       <h1>Todo List</h1>
-      {message && <div className='alert alert-success'>{message}</div>}
-
       <div className='container'>
         <div className='yyrow'>
           <button className='btn btn-success' onClick={addTodoClicked}>
@@ -152,8 +153,7 @@ export default function TodoList() {
         </div>
         <Table columns={columns} data={data} initially={initalState} showGlobalFilter={false} />
       </div>
-      <div className="container">&nbsp;{/* TODO just here to avoid being hidden below footer */}</div>  
-      
+      <div className='container'>&nbsp;{/* TODO just here to avoid being hidden below footer */}</div>
     </div>
   );
 }

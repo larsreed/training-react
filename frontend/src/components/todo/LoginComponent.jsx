@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AuthenticationService from './AuthenticationService.js';
+import ShowError from './ErrorHandling.js';
 
 export default class LoginComponent extends Component {
   constructor(props) {
@@ -7,7 +8,6 @@ export default class LoginComponent extends Component {
     this.state = {
       username: 'foo',
       password: '',
-      hasFailed: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.loginClicked = this.loginClicked.bind(this);
@@ -20,19 +20,12 @@ export default class LoginComponent extends Component {
   }
 
   loginClicked() {
-    // console.log("try");
     AuthenticationService.authenticate(this.state.username, this.state.password)
       .then((resp) => {
-        // console.log('then '+resp);
         AuthenticationService.registerJwtLogin(this.state.username, resp.data.token);
         this.props.history.push(`/welcome/${this.state.username}`);
       })
-      .catch((error) => {
-        // console.log("catch "+error);
-        this.setState({
-          hasFailed: true,
-        });
-      });
+      .catch((error) => ShowError('Login', error));
   }
 
   render() {
@@ -40,7 +33,6 @@ export default class LoginComponent extends Component {
       <div>
         <h1>Login</h1>
         <div className='container'>
-          {this.state.hasFailed && <div className='alert alert-warning'>Invalid Credentials</div>}
           <div className='container'>
             <p>
               Username: <input type='text' name='username' value={this.state.username} onChange={this.handleChange} />

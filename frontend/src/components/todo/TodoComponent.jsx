@@ -3,6 +3,7 @@ import moment from 'moment';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import TodoDataService from '../../api/todo/TodoDataService';
 import AuthenticationService from './AuthenticationService';
+import ShowError from './ErrorHandling';
 
 export default class TodoComponent extends Component {
   constructor(props) {
@@ -25,14 +26,16 @@ export default class TodoComponent extends Component {
 
   componentDidMount() {
     if (this.state.id > 0) {
-      TodoDataService.retrieveTodo(AuthenticationService.currentUser(), this.state.id).then((response) => {
-        this.setState({
-          description: response.data.description,
-          dueDate: moment(response.data.dueDate).format('YYYY-MM-DD'),
-          done: response.data.done,
-        });
-        this.firstField.current.focus();
-      });
+      TodoDataService.retrieveTodo(AuthenticationService.currentUser(), this.state.id)
+        .then((response) => {
+          this.setState({
+            description: response.data.description,
+            dueDate: moment(response.data.dueDate).format('YYYY-MM-DD'),
+            done: response.data.done,
+          });
+          this.firstField.current.focus();
+        })
+        .catch((error) => ShowError('Retrieve ' + this.state.id, error));
     } else {
       this.firstField.current.focus();
     }
@@ -47,7 +50,9 @@ export default class TodoComponent extends Component {
         description: values.description,
         dueDate: values.dueDate,
         done: values.done,
-      }).then(() => this.props.history.goBack());
+      })
+        .then(() => this.props.history.goBack())
+        .catch((error) => ShowError('Create', error));
     } else {
       TodoDataService.updateTodo(user, todoid, {
         id: todoid,
@@ -55,7 +60,9 @@ export default class TodoComponent extends Component {
         description: values.description,
         dueDate: values.dueDate,
         done: values.done,
-      }).then(() => this.props.history.goBack());
+      })
+        .then(() => this.props.history.goBack())
+        .catch((error) => ShowError('Update', error));
     }
   }
 
