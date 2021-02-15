@@ -147,7 +147,7 @@ export default function TodoList() {
       <div className='container'>
         <div className='yyrow'>
           <button className='btn btn-success' onClick={addTodoClicked}>
-            Add
+            Add new task
           </button>
           <p />
         </div>
