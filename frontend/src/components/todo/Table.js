@@ -86,7 +86,7 @@ export function BooleanFilter({ column: { filterValue, setFilter } }) {
     return [...options.values()];
   }, []);
 
-  // Render a multi-select box
+  // Render a multi-select box -- TODO support flip checkmarks
   return (
     <select
       value={filterValue}
@@ -97,7 +97,7 @@ export function BooleanFilter({ column: { filterValue, setFilter } }) {
       <option value=''>All</option>
       {options.map((option, i) => (
         <option key={i} value={option}>
-          {option ? 'Yes' : 'No'}
+          {option ? '☑ Yes' : '☐ No' }
         </option>
       ))}
     </select>
