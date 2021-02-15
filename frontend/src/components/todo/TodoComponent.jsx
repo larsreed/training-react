@@ -76,6 +76,8 @@ export default class TodoComponent extends Component {
       errors.description = 'Description must be defined';
     } else if (values.description.length < 3) {
       errors.description = 'Description must be at least 3 characters';
+    } else if (values.description.length > 255) {
+      errors.description = 'Description must be at most 255 characters';
     }
     if (!moment(values.dueDate).isValid) {
       errors.dueDate = 'Invalid date';
@@ -90,12 +92,13 @@ export default class TodoComponent extends Component {
 
   render() {
     let { description, dueDate, done } = this.state;
+    const width = { maxWidth: "480px" }
 
     return (
-      <div>
+      <div style={width}>
         <h1>{this.title(this.state.id)}</h1>
         <div className='container'>
-          <Formik
+          <Formik 
             initialValues={{ description, dueDate, done }}
             onSubmit={this.onSubmit}
             validateOnBlur={false}
@@ -109,7 +112,7 @@ export default class TodoComponent extends Component {
                 <ErrorMessage name='dueDate' component='div' className='alert alert-warning' />
                 <fieldset className='form-group'>
                   <label>Description</label>
-                  <Field className='form-control' type='text' name='description' innerRef={this.firstField} />
+                  <Field className='form-control' component="textarea" type='text' name='description' innerRef={this.firstField} />
                 </fieldset>
                 <fieldset className='form-group'>
                   <label>Due date</label>

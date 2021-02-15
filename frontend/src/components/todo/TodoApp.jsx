@@ -6,11 +6,11 @@ import HeaderComponent from './HeaderComponent';
 import FooterComponent from './FooterComponent';
 import ErrorComponent from './ErrorComponent';
 import LogoutComponent from './LogoutComponent';
-import WelcomeComponent from './WelcomeComponent';
 import TodoComponent from './TodoComponent.jsx';
 import TodoListComponent from './TodoListComponent.jsx';
 import { ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import HomeComponent from './HomeComponent';
 
 class TodoApp extends Component {
 
@@ -26,7 +26,7 @@ class TodoApp extends Component {
           <Route path='/' exact component={LoginComponent} />
           <Route path='/login' component={LoginComponent} />
           <Route path='/logout' component={LogoutComponent} />
-          <AuthenticatedRoute path='/welcome/:name' component={WelcomeComponent} />
+          <AuthenticatedRoute path='/welcome/:name' component={HomeComponent} />
           <AuthenticatedRoute path='/todos/:id' component={TodoComponent} />
           <AuthenticatedRoute path='/todos' component={TodoListComponent} />
           <Route component={ErrorComponent} />
