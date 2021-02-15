@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// import TodoDataService from '../../api/todo/TodoDataService.js';
 import AuthenticationService from './AuthenticationService.js';
 import ShowError from './ErrorHandling.js';
 
@@ -23,6 +24,14 @@ export default class LoginComponent extends Component {
     AuthenticationService.authenticate(this.state.username, this.state.password)
       .then((resp) => {
         AuthenticationService.registerJwtLogin(this.state.username, resp.data.token);
+      //   const healthTimer = setInterval(() => {
+      //     AuthenticationService.isUserLoggedIn() && TodoDataService.isAlive()
+      //       .then(() => console.log("OK"))
+      //       .catch((error) => {
+      //         console.log(error)
+      //         ShowError("backend", error)
+      //       });
+      //   }, 15000); // send the request every 15 seconds
         this.props.history.push(`/welcome/${this.state.username}`);
       })
       .catch((error) => ShowError('Login', error));

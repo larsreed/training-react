@@ -21,6 +21,10 @@ class TodoDataService {
   createTodo(user, todo) {
     return todoApi.post(`/users/${user}/todos`, todo);
   }
+
+  isAlive() {
+    return todoApi.get("/actuator/health")
+  }
 }
 
 export default new TodoDataService();

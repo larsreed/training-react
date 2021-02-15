@@ -13,6 +13,7 @@ import { ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 class TodoApp extends Component {
+
   render() {
     const progCss = {
       background: 'linear-gradient(to right, rgba(33, 177, 89, .1), rgba(33, 177, 89, 1))',
