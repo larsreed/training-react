@@ -2,6 +2,8 @@ import { matchSorter } from 'match-sorter';
 import { useMemo, useState } from 'react';
 import { useTable, useSortBy, useFilters, useAsyncDebounce, useGlobalFilter } from 'react-table';
 
+// TYPESCRIPT: Too much strange going on with react-table :(
+
 // Create a default prop getter
 const defaultPropGetter = () => ({});
 

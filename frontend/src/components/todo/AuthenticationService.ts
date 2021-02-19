@@ -4,34 +4,34 @@ export const SESSION_USERNAME = 'authenticatedUser';
 export const SESSION_TOKEN = 'authToken';
 
 class AuthenticationService {
-  authenticateBasic(username, password) {
+  authenticateBasic(username: string, password: string) {
     return todoApi.get('/basicauth', {
       headers: { authorization: this.createBasicAuthToken(username, password) },
     });
   }
 
-  createBasicAuthToken(username, password) {
+  createBasicAuthToken(username: string, password: string): string {
     return 'Basic ' + window.btoa(username + ':' + password);
   }
 
-  registerLogin(username, password) {
+  registerLogin(username: string, password: string) {
     let token = this.createBasicAuthToken(username, password);
     sessionStorage.setItem(SESSION_USERNAME, username);
     sessionStorage.setItem(SESSION_TOKEN, token);
   }
 
-  authenticate(username, password) {
+  authenticate(username: string, password: string) {
     return todoApi.post('/authenticate', {
       username,
       password,
     });
   }
 
-  createJwtAuthToken(token) {
+  createJwtAuthToken(token: string): string {
     return 'Bearer ' + token;
   }
 
-  registerJwtLogin(username, inToken) {
+  registerJwtLogin(username: string, inToken: string) {
     let token = this.createJwtAuthToken(inToken);
     sessionStorage.setItem(SESSION_USERNAME, username);
     sessionStorage.setItem(SESSION_TOKEN, token);
@@ -42,11 +42,12 @@ class AuthenticationService {
     sessionStorage.removeItem(SESSION_TOKEN);
   }
 
-  currentUser() {
-    return sessionStorage.getItem(SESSION_USERNAME);
+  currentUser(): string {
+    let user= sessionStorage.getItem(SESSION_USERNAME);
+    return user? user : "";
   }
 
-  isUserLoggedIn() {
+  isUserLoggedIn(): boolean {
     return !(this.currentUser() == null);
   }
 }

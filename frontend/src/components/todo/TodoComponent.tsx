@@ -1,12 +1,23 @@
 import React, { Component } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
+
 import moment from 'moment';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { ErrorMessage, Field, Form, Formik, FormikProps, FormikErrors } from 'formik';
+
 import TodoDataService from '../../api/todo/TodoDataService';
 import AuthenticationService from './AuthenticationService';
 import ShowError from './ErrorHandling';
+import { Todo } from './Domain';
 
-export default class TodoComponent extends Component {
-  constructor(props) {
+interface TodoProps extends RouteComponentProps<any> {
+  id: number;
+}
+
+
+export default class TodoComponent extends Component<TodoProps & FormikProps<TodoProps>, Todo> {
+  firstField: React.RefObject<any>;
+
+  constructor(props: any) {
     super(props);
 
     this.state = {
@@ -25,8 +36,8 @@ export default class TodoComponent extends Component {
   }
 
   componentDidMount() {
-    if (this.state.id > 0) {
-      TodoDataService.retrieveTodo(AuthenticationService.currentUser(), this.state.id)
+    if (this.state.id! > 0) {
+      TodoDataService.retrieveTodo(AuthenticationService.currentUser(), this.state.id!)
         .then((response) => {
           this.setState({
             description: response.data.description,
@@ -41,10 +52,10 @@ export default class TodoComponent extends Component {
     }
   }
 
-  onSubmit(values) {
+  onSubmit(values: { description: string; dueDate: string; done: boolean }) {
     var user = AuthenticationService.currentUser();
     var todoid = this.state.id;
-    if (todoid < 1) {
+    if (todoid! < 1) {
       TodoDataService.createTodo(user, {
         userName: user,
         description: values.description,
@@ -54,7 +65,7 @@ export default class TodoComponent extends Component {
         .then(() => this.props.history.goBack())
         .catch((error) => ShowError('Create', error));
     } else {
-      TodoDataService.updateTodo(user, todoid, {
+      TodoDataService.updateTodo(user, todoid!, {
         id: todoid,
         userName: user,
         description: values.description,
@@ -70,8 +81,8 @@ export default class TodoComponent extends Component {
     this.props.history.goBack();
   }
 
-  validate(values) {
-    let errors = {};
+  validate(values: { description: string; dueDate: moment.MomentInput }) {
+    let errors: FormikErrors<Todo> = {};
     if (!values.description) {
       errors.description = 'Description must be defined';
     } else if (values.description.length < 3) {
@@ -85,20 +96,19 @@ export default class TodoComponent extends Component {
     return errors;
   }
 
-  title(id) {
+  title(id: number) {
     if (id < 1) return 'New Todo';
     else return 'Edit Todo #' + id;
   }
 
   render() {
     let { description, dueDate, done } = this.state;
-    const width = { maxWidth: "480px" }
 
     return (
-      <div style={width}>
-        <h1>{this.title(this.state.id)}</h1>
+      <div className='maxWidth'>
+        <h1>{this.title(this.state.id!)}</h1>
         <div className='container'>
-          <Formik 
+          <Formik
             initialValues={{ description, dueDate, done }}
             onSubmit={this.onSubmit}
             validateOnBlur={false}
@@ -112,7 +122,13 @@ export default class TodoComponent extends Component {
                 <ErrorMessage name='dueDate' component='div' className='alert alert-warning' />
                 <fieldset className='form-group'>
                   <label>Description</label>
-                  <Field className='form-control' component="textarea" type='text' name='description' innerRef={this.firstField} />
+                  <Field
+                    className='form-control'
+                    component='textarea'
+                    type='text'
+                    name='description'
+                    innerRef={this.firstField}
+                  />
                 </fieldset>
                 <fieldset className='form-group'>
                   <label>Due date</label>

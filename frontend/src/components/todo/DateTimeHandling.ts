@@ -1,13 +1,13 @@
-var formatISO = require('date-fns/formatISO')
+var formatISO = require('date-fns/formatISO');
 
 class DateTimeHandling {
-  dateTime(dtString) {
+  dateTime(dtString: string) {
     return formatISO(new Date(dtString));
   }
-  dateOnly(dtString) {
+  dateOnly(dtString: string) {
     return formatISO(new Date(dtString), { representation: 'date' });
   }
-  timeOnly(dtString) {
+  timeOnly(dtString: string) {
     return formatISO(new Date(dtString), { representation: 'time' });
   }
 }

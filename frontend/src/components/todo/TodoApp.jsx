@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import AuthenticatedRoute from './AuthenticatedRoute.jsx';
+import AuthenticatedRoute from './AuthenticatedRoute';
 import LoginComponent from './LoginComponent';
 import HeaderComponent from './HeaderComponent';
 import FooterComponent from './FooterComponent';
 import ErrorComponent from './ErrorComponent';
 import LogoutComponent from './LogoutComponent';
-import TodoComponent from './TodoComponent.jsx';
-import TodoListComponent from './TodoListComponent.jsx';
+import TodoComponent from './TodoComponent';
+import TodoListComponent from './TodoListComponent';
 import { ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import HomeComponent from './HomeComponent';

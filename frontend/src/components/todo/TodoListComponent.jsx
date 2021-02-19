@@ -10,6 +10,8 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import ShowError, { ShowInfo } from './ErrorHandling';
 
+// TYPESCRIPT: Too much strange going on with react-table :(
+
 export default function TodoList() {
   let history = useHistory();
 
